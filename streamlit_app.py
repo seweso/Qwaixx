@@ -17,8 +17,8 @@ class GameEngine:
         self.qwixx_dice.roll()  # Roll dice before displaying the turn
         st.write(f"{current_player.name} turn")
         st.write(f"Dice result: {self.qwixx_dice.format_results()}")
-        current_player.make_move(self.qwixx_dice)
         self.display_score_card(current_player.name)
+        current_player.make_move(self.qwixx_dice)
         self.switch_to_next_player()
 
     def display_score_card(self, player_name):
