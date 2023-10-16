@@ -8,8 +8,11 @@ class Player:
 
     def make_move(self, game_state, dice_results):
         formatted_results = dice_results.format_results()
-        st.write(f"{self.name}, it's your turn. Dice results: {formatted_results}")
+        st.write(f"{self.name} turn")
+        st.write(f"Dice result: {formatted_results}")
+        st.write(f"Current Score card for {self.name}:")
         # Implement the logic for a player's move
+        pass
 
 class HumanPlayer(Player):
     def roll_dice(self):
@@ -60,7 +63,9 @@ game_state["current_player"] = current_player
 if current_player.roll_dice():
     qwixx_dice = Dice(['R', 'B', 'Y', 'G', 'W', 'W'])  # Moved Dice creation here
     qwixx_dice.roll()
-    st.write("Dice results:", qwixx_dice.format_results())
+    st.write(f"{current_player.name} turn")
+    st.write(f"Dice result: {qwixx_dice.format_results()}")
+    st.write(f"Current Score card for {current_player.name}:")
     current_player.make_move(game_state, qwixx_dice)
 
 # Switch to the next player
