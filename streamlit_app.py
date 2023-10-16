@@ -23,11 +23,7 @@ class GameEngine:
 
     def display_score_card(self, player_name):
         score_card = self.score_cards[player_name]
-        st.write(f"Current Score card for {player_name}:")
-        for color, numbers in score_card.get_score_card().items():
-            if numbers:
-                bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
-                st.write(f"{color}:{','.join(map(str, numbers))}{bonus}")
+        st.write(f"Current Score card for {player_name}:\n{score_card.format_results()}")
 
 class ScoreCard:
     def __init__(self):
@@ -38,6 +34,14 @@ class ScoreCard:
 
     def get_score_card(self):
         return self.score_card
+
+    def format_results(self):
+        result = []
+        for color, numbers in self.score_card.items():
+            if numbers:
+                bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
+                result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
+        return '\n'.join(result)
 
 class Player:
     def __init__(self, name):
