@@ -12,7 +12,6 @@ class GameEngine:
     def switch_to_next_player(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
-    @st.cache(suppress_st_warning=True)
     def make_move(self):
         current_player = self.players[self.current_player_index]
         self.qwixx_dice.roll()  # Roll dice before displaying the turn
@@ -49,7 +48,6 @@ class ScoreCard:
                 result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
         return '\n'.join(result)
 
-    @st.cache(suppress_st_warning=True)
     def calculate_score(self, selections):
         total_score = 0
         for color, numbers in self.score_card.items():
@@ -79,8 +77,7 @@ class HumanPlayer(Player):
     def get_selections(self):
         st.write(f"Make your selections (e.g., R4,B12):")
         user_selections = st.text_input("Selections:")
-        selections = user_selections.split(',')
-        return selections
+        return user_selections
 
 class AiPlayer(Player):
     def make_move(self, dice_results, score_card, selections):
@@ -94,7 +91,6 @@ class Dice:
         self.colors = ['R', 'Y', 'G', 'B', 'W', 'W']
         self.results = []
 
-    @st.cache(suppress_st_warning=True)
     def roll(self):
         self.results = [f"{color}{random.randint(1, 6)}" for color in self.colors]
 
@@ -108,6 +104,9 @@ if "game_engine" not in st.session_state:
     st.session_state.game_engine = GameEngine()
 
 game_engine = st.session_state.game_engine
+
+if "selections" not in st.session_state:
+    st.session_state.selections = []
 
 if st.button("Next Turn"):
     game_engine.make_move()
