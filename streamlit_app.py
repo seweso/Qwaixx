@@ -14,11 +14,11 @@ class GameEngine:
 
     def make_move(self):
         current_player = self.players[self.current_player_index]
+        self.qwixx_dice.roll()  # Roll dice before displaying the turn
         st.write(f"{current_player.name} turn")
-        self.qwixx_dice.roll()
         st.write(f"Dice result: {self.qwixx_dice.format_results()}")
-        self.display_score_card(current_player.name)
         current_player.make_move(self.qwixx_dice)
+        self.display_score_card(current_player.name)
         self.switch_to_next_player()
 
     def display_score_card(self, player_name):
@@ -41,7 +41,7 @@ class ScoreCard:
             numbers = self.score_card.get(color, [])
             bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
             result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
-        
+
         for color in ['W', 'W2']:
             numbers = self.score_card.get(color, [])
             result.append(f"{color}:{','.join(map(str, numbers))}")
@@ -67,7 +67,7 @@ class AiPlayer(Player):
 
 class Dice:
     def __init__(self):
-        self.colors = ['R', 'Y', 'G', 'B', 'W', 'W']
+        self.colors = ['R', 'Y', 'G', 'B', 'W', 'W2']
         self.results = []
 
     def roll(self):
