@@ -12,6 +12,7 @@ class GameEngine:
     def switch_to_next_player(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
+    @st.cache(suppress_st_warning=True)
     def make_move(self):
         current_player = self.players[self.current_player_index]
         self.qwixx_dice.roll()  # Roll dice before displaying the turn
@@ -48,6 +49,7 @@ class ScoreCard:
                 result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
         return '\n'.join(result)
 
+    @st.cache(suppress_st_warning=True)
     def calculate_score(self, selections):
         total_score = 0
         for color, numbers in self.score_card.items():
@@ -65,7 +67,6 @@ class Player:
         self.name = name
 
     def make_move(self, dice_results, score_card, selections):
-        # Implement the logic for a player's move
         pass
 
     def get_selections(self):
@@ -93,6 +94,7 @@ class Dice:
         self.colors = ['R', 'Y', 'G', 'B', 'W', 'W']
         self.results = []
 
+    @st.cache(suppress_st_warning=True)
     def roll(self):
         self.results = [f"{color}{random.randint(1, 6)}" for color in self.colors]
 
