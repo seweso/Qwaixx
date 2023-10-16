@@ -7,29 +7,25 @@ class Player:
         self.name = name
 
     def make_move(self, game_state, dice_results):
-        formatted_results = dice_results.format_results()
-        st.write(f"{self.name} turn")
-        st.write(f"Dice result: {formatted_results}")
-        st.write(f"Current Score card for {self.name}:")
+        st.write("Abstract move impl")
         # Implement the logic for a player's move
         pass
 
 class HumanPlayer(Player):
     def roll_dice(self):
-        if st.button("Roll All Dice"):
+        if st.button("Human roll dice"):
             return True
         return False
 
 class AiPlayer(Player):
     def roll_dice(self):
-        time.sleep(1)  # Simulating the AI's decision-making time
+        st.write("AI roll dice") 
+        time.sleep(1)
+        return True
 
 class Dice:
-    def __init__(self, colors):
-        self.colors = colors
-        self.results = []
-
-    def roll(self):
+    def __init__(self):
+        self.colors = ['R', 'B', 'Y', 'G', 'W', 'W']
         self.results = [f"{color}{random.randint(1, 6)}" for color in self.colors]
 
     def format_results(self):
@@ -42,13 +38,8 @@ game_state = {
     # Add more game state variables as needed
 }
 
-# Create players
-human_player = HumanPlayer("Alice")
-ai_player = AiPlayer("AI Bot")
-
 # List of players
-players = [human_player, ai_player]
-player_names = [player.name for player in players]
+players = [HumanPlayer("Alice"), AiPlayer("AI Bot")]
 
 # Streamlit app
 st.title("Qwixx Game Simulator")
@@ -62,8 +53,7 @@ game_state["current_player"] = current_player
 
 if current_player.roll_dice():
     st.write(f"{current_player.name} turn")
-    qwixx_dice = Dice(['R', 'B', 'Y', 'G', 'W', 'W'])  # Moved Dice creation here
-    qwixx_dice.roll()
+    qwixx_dice = Dice() 
     st.write(f"Dice result: {qwixx_dice.format_results()}")
     st.write(f"Current Score card for {current_player.name}:")
     current_player.make_move(game_state, qwixx_dice)
