@@ -32,7 +32,7 @@ class ScoreCard:
         }
 
     def get_score_card(self):
-        return self score_card
+        return self.score_card
 
     def format_results(self):
         result = []
@@ -41,7 +41,7 @@ class ScoreCard:
             if not numbers:
                 result.append(f"{color}:")
             else:
-                bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
+                bonus = "B" if len numbers >= 5 and 12 in numbers else ""
                 result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
         return '\n'.join(result)
 
