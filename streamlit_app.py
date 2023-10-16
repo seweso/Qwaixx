@@ -10,12 +10,14 @@ class Player:
 
 class HumanPlayer(Player):
     def make_move(self, game_state, dice_results):
-        st.write(f"{self.name}, it's your turn. Dice results: {dice_results}")
+        formatted_results = ''.join(dice_results)
+        st.write(f"{self.name}, it's your turn. Dice results: {formatted_results}")
         # Implement the logic for a human player's move
 
 class AiPlayer(Player):
     def make_move(self, game_state, dice_results):
-        st.write(f"{self.name} is making a move... Dice results: {dice_results}")
+        formatted_results = ''.join(dice_results)
+        st.write(f"{self.name} is making a move... Dice results: {formatted_results}")
         # Implement the logic for an AI player's move
 
 # Example game state
@@ -36,10 +38,8 @@ players = [human_player, ai_player]
 st.title("Qwixx Game Simulator")
 
 if st.button("Roll All Dice"):
-    dice_results = [random.randint(1, 6) for _ in range(6)]
-    st.write("Dice results:")
-    for i, result in enumerate(dice_results):
-        st.write(f"Dice {i+1}: {result}")
+    dice_results = ['R', 'B', 'Y', 'G', 'W', 'W']
+    st.write("Dice results:", ''.join(dice_results))
     
     current_player = random.choice(players)  # Choose a random player
     game_state["current_player"] = current_player
