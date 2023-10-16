@@ -43,20 +43,23 @@ qwixx_dice = Dice(['R', 'B', 'Y', 'G', 'W', 'W'])
 
 # List of players
 players = [human_player, ai_player]
+player_names = [player.name for player in players]
 
 # Streamlit app
 st.title("Qwixx Game Simulator")
 
-if "current_player" not in st.session_state:
-    st.session_state.current_player = players[0]  # Initialize current player
+if "current_player_index" not in st.session_state:
+    st.session_state.current_player_index = 0  # Initialize current player index
 
 if st.button("Roll All Dice"):
     qwixx_dice.roll()
     st.write("Dice results:", qwixx_dice.format_results())
 
-    current_player = st.session_state.current_player
+    current_player_index = st.session_state.current_player_index
+    current_player = players[current_player_index]
     game_state["current_player"] = current_player
     current_player.make_move(game_state, qwixx_dice)
     
     # Switch to the next player
-    st.session_state.current_player = players[(players.index(current_player) + 1) % len(players)]
+    current_player_index = (current_player_index + 1) % len(players)
+    st.session_state.current_player_index = current_player_index
