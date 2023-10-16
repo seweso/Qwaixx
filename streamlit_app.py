@@ -21,7 +21,16 @@ class AiPlayer(Player):
     def roll_dice(self):
         time.sleep(1)  # Simulating the AI's decision-making time
 
-# Create a Dice class as before
+class Dice:
+    def __init__(self, colors):
+        self.colors = colors
+        self.results = []
+
+    def roll(self):
+        self.results = [f"{color}{random.randint(1, 6)}" for color in self.colors]
+
+    def format_results(self):
+        return ' '.join(self.results)
 
 # Example game state
 game_state = {
@@ -33,9 +42,6 @@ game_state = {
 # Create players
 human_player = HumanPlayer("Alice")
 ai_player = AiPlayer("AI Bot")
-
-# Create dice
-qwixx_dice = Dice(['R', 'B', 'Y', 'G', 'W', 'W'])
 
 # List of players
 players = [human_player, ai_player]
@@ -52,6 +58,7 @@ current_player = players[current_player_index]
 game_state["current_player"] = current_player
 
 if current_player.roll_dice():
+    qwixx_dice = Dice(['R', 'B', 'Y', 'G', 'W', 'W'])  # Moved Dice creation here
     qwixx_dice.roll()
     st.write("Dice results:", qwixx_dice.format_results())
     current_player.make_move(game_state, qwixx_dice)
