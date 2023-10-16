@@ -28,8 +28,7 @@ class GameEngine:
 class ScoreCard:
     def __init__(self):
         self.score_card = {
-            'R': [], 'Y': [], 'G': [], 'B': [],
-            'W': [], 'W2': []
+            'R': [], 'Y': [], 'G': [], 'B': []
         }
 
     def get_score_card(self):
@@ -39,13 +38,11 @@ class ScoreCard:
         result = []
         for color in ['R', 'Y', 'G', 'B']:
             numbers = self.score_card.get(color, [])
-            bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
-            result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
-
-        for color in ['W', 'W2']:
-            numbers = self.score_card.get(color, [])
-            result.append(f"{color}:{','.join(map(str, numbers))}")
-
+            if not numbers:
+                result.append(f"{color}:")
+            else:
+                bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
+                result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
         return '\n'.join(result)
 
 class Player:
@@ -67,10 +64,11 @@ class AiPlayer(Player):
 
 class Dice:
     def __init__(self):
-        self.colors = ['R', 'Y', 'G', 'B', 'W', 'W2']
+        self.colors = ['R', 'Y', 'G', 'B', 'W', 'W']
         self.results = []
 
     def roll(self):
+        random.shuffle(self.colors)  # Shuffle the colors
         self.results = [f"{color}{random.randint(1, 6)}" for color in self.colors]
 
     def format_results(self):
