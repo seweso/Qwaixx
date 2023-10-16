@@ -30,12 +30,12 @@ class Player:
 
 class HumanPlayer(Player):
     def make_move(self, dice_results):
-        super().make_move(dice_results)
+        pass
 
 class AiPlayer(Player):
     def make_move(self, dice_results):
         time.sleep(1)
-        super().make_move(dice_results)
+        pass
 
 class Dice:
     def __init__(self):
@@ -56,5 +56,5 @@ if "game_engine" not in st.session_state:
 
 game_engine = st.session_state.game_engine
 
-if game_engine.players[game_engine.current_player_index].name == "AI Bot":
+if st.button("Next Turn"):
     game_engine.make_move()
