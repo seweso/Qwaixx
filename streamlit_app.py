@@ -7,6 +7,7 @@ class GameEngine:
         self.players = [HumanPlayer("Alice"), AiPlayer("AI Bot")]
         self.current_player_index = 0
         self.qwixx_dice = Dice()
+        self.score_cards = {player.name: ScoreCard() for player in self.players}
 
     def switch_to_next_player(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
@@ -16,9 +17,27 @@ class GameEngine:
         st.write(f"{current_player.name} turn")
         self.qwixx_dice.roll()
         st.write(f"Dice result: {self.qwixx_dice.format_results()}")
-        st.write(f"Current Score card for {current_player.name}:")
+        self.display_score_card(current_player.name)
         current_player.make_move(self.qwixx_dice)
         self.switch_to_next_player()
+
+    def display_score_card(self, player_name):
+        score_card = self.score_cards[player_name]
+        st.write(f"Current Score card for {player_name}:")
+        for color, numbers in score_card.get_score_card().items():
+            if numbers:
+                bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
+                st.write(f"{color}:{','.join(map(str, numbers))}{bonus}")
+
+class ScoreCard:
+    def __init__(self):
+        self.score_card = {
+            'R': [], 'Y': [], 'G': [], 'B': [],
+            'W': [], 'W2': []
+        }
+
+    def get_score_card(self):
+        return self.score_card
 
 class Player:
     def __init__(self, name):
@@ -39,7 +58,7 @@ class AiPlayer(Player):
 
 class Dice:
     def __init__(self):
-        self.colors = ['R', 'B', 'Y', 'G', 'W', 'W']
+        self.colors = ['R', 'B', 'Y', 'G', 'W', 'W2']
         self.results = []
 
     def roll(self):
