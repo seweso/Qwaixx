@@ -6,7 +6,7 @@ class Player:
         self.name = name
 
     def make_move(self, game_state, dice_results):
-        formatted_results = ' '.join(dice_results)
+        formatted_results = dice_results.format_results()
         st.write(f"{self.name}, it's your turn. Dice results: {formatted_results}")
         # Implement the logic for a player's move
 
@@ -53,4 +53,4 @@ if st.button("Roll All Dice"):
     
     current_player = random.choice(players)  # Choose a random player
     game_state["current_player"] = current_player
-    current_player.make_move(game_state, qwixx_dice.results)
+    current_player.make_move(game_state, qwixx_dice)
