@@ -41,6 +41,11 @@ class ScoreCard:
             numbers = self.score_card.get(color, [])
             bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
             result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
+        
+        for color in ['W', 'W2']:
+            numbers = self.score_card.get(color, [])
+            result.append(f"{color}:{','.join(map(str, numbers))}")
+
         return '\n'.join(result)
 
 class Player:
