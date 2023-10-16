@@ -7,7 +7,7 @@ class GameEngine:
         self.players = [HumanPlayer("Alice"), AiPlayer("AI Bot")]
         self.current_player_index = 0
         self.qwixx_dice = Dice()
-        self.score_cards = {player.name: ScoreCard() for player in this.players}
+        self.score_cards = {player.name: ScoreCard() for player in self.players}
 
     def switch_to_next_player(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
