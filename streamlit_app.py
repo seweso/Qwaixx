@@ -30,12 +30,10 @@ class Player:
 
 class HumanPlayer(Player):
     def make_move(self, dice_results):
-        st.button("Human roll dice")
         super().make_move(dice_results)
 
 class AiPlayer(Player):
     def make_move(self, dice_results):
-        st.write("AI roll dice")
         time.sleep(1)
         super().make_move(dice_results)
 
@@ -60,6 +58,3 @@ game_engine = st.session_state.game_engine
 
 if game_engine.players[game_engine.current_player_index].name == "AI Bot":
     game_engine.make_move()
-elif game_engine.players[game_engine.current_player_index].name == "Alice":
-    if st.button("Roll All Dice"):
-        game_engine.make_move()
