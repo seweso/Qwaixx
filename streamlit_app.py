@@ -1,5 +1,6 @@
 import streamlit as st
 import random
+import time
 
 class Player:
     def __init__(self, name):
@@ -11,21 +12,16 @@ class Player:
         # Implement the logic for a player's move
 
 class HumanPlayer(Player):
-    pass
+    def roll_dice(self):
+        if st.button("Roll All Dice"):
+            return True
+        return False
 
 class AiPlayer(Player):
-    pass
+    def roll_dice(self):
+        time.sleep(1)  # Simulating the AI's decision-making time
 
-class Dice:
-    def __init__(self, colors):
-        self.colors = colors
-        self.results = []
-
-    def roll(self):
-        self.results = [f"{color}{random.randint(1, 6)}" for color in self.colors]
-
-    def format_results(self):
-        return ' '.join(self.results)
+# Create a Dice class as before
 
 # Example game state
 game_state = {
@@ -51,15 +47,15 @@ st.title("Qwixx Game Simulator")
 if "current_player_index" not in st.session_state:
     st.session_state.current_player_index = 0  # Initialize current player index
 
-if st.button("Roll All Dice"):
+current_player_index = st.session_state.current_player_index
+current_player = players[current_player_index]
+game_state["current_player"] = current_player
+
+if current_player.roll_dice():
     qwixx_dice.roll()
     st.write("Dice results:", qwixx_dice.format_results())
-
-    current_player_index = st.session_state.current_player_index
-    current_player = players[current_player_index]
-    game_state["current_player"] = current_player
     current_player.make_move(game_state, qwixx_dice)
-    
-    # Switch to the next player
-    current_player_index = (current_player_index + 1) % len(players)
-    st.session_state.current_player_index = current_player_index
+
+# Switch to the next player
+current_player_index = (current_player_index + 1) % len(players)
+st.session_state.current_player_index = current_player_index
