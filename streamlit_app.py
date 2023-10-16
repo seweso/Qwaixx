@@ -12,11 +12,12 @@ class GameEngine:
     def switch_to_next_player(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
-    def make_move(self, selections):
+    def make_move(self):
         current_player = self.players[self.current_player_index]
         self.qwixx_dice.roll()  # Roll dice before displaying the turn
         st.write(f"{current_player.name} turn")
         st.write(f"Dice result: {self.qwixx_dice.format_results()}")
+        selections = current_player.get_selections()
         self.display_score_card(current_player.name, selections)
         current_player.make_move(self.qwixx_dice, self.score_cards[current_player.name], selections)
         self.switch_to_next_player()
@@ -55,6 +56,10 @@ class ScoreCard:
                     total_score += number
         return total_score
 
+    def add_selection(self, color, number):
+        if color in self.score_card:
+            self.score_card[color].append(number)
+
 class Player:
     def __init__(self, name):
         self.name = name
@@ -63,20 +68,25 @@ class Player:
         # Implement the logic for a player's move
         pass
 
+    def get_selections(self):
+        pass
+
 class HumanPlayer(Player):
     def make_move(self, dice_results, score_card, selections):
+        pass
+
+    def get_selections(self):
         st.write(f"Make your selections (e.g., R4,B12):")
         user_selections = st.text_input("Selections:")
         selections = user_selections.split(',')
-        for selection in selections:
-            if selection:
-                color, number = selection[0], int(selection[1:])
-                if f"{color}{number}" in dice_results:
-                    score_card.add_selection(color, number)
+        return selections
 
 class AiPlayer(Player):
     def make_move(self, dice_results, score_card, selections):
         time.sleep(1)
+
+    def get_selections(self):
+        return []
 
 class Dice:
     def __init__(self):
