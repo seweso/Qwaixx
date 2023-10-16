@@ -2,62 +2,64 @@ import streamlit as st
 import random
 import time
 
+class GameEngine:
+    def __init__(self):
+        self.players = [HumanPlayer("Alice"), AiPlayer("AI Bot")]
+        self.current_player_index = 0
+        self.qwixx_dice = Dice()
+
+    def switch_to_next_player(self):
+        self.current_player_index = (self.current_player_index + 1) % len(self.players)
+
+    def make_move(self):
+        current_player = self.players[self.current_player_index]
+        st.write(f"{current_player.name} turn")
+        self.qwixx_dice.roll()
+        st.write(f"Dice result: {self.qwixx_dice.format_results()}")
+        st.write(f"Current Score card for {current_player.name}:")
+        current_player.make_move(self.qwixx_dice)
+        self.switch_to_next_player()
+
 class Player:
     def __init__(self, name):
         self.name = name
 
-    def make_move(self, game_state, dice_results):
-        st.write("Abstract move impl")
+    def make_move(self, dice_results):
         # Implement the logic for a player's move
         pass
 
 class HumanPlayer(Player):
-    def roll_dice(self):
-        if st.button("Human roll dice"):
-            return True
-        return False
+    def make_move(self, dice_results):
+        st.button("Human roll dice")
+        super().make_move(dice_results)
 
 class AiPlayer(Player):
-    def roll_dice(self):
-        st.write("AI roll dice") 
+    def make_move(self, dice_results):
+        st.write("AI roll dice")
         time.sleep(1)
-        return True
+        super().make_move(dice_results)
 
 class Dice:
     def __init__(self):
         self.colors = ['R', 'B', 'Y', 'G', 'W', 'W']
+        self.results = []
+
+    def roll(self):
         self.results = [f"{color}{random.randint(1, 6)}" for color in self.colors]
 
     def format_results(self):
         return ' '.join(self.results)
 
-# Example game state
-game_state = {
-    "current_player": None,
-    "board": [0, 0, 0, 0, 0],  # Represents the Qwixx game board
-    # Add more game state variables as needed
-}
-
-# List of players
-players = [HumanPlayer("Alice"), AiPlayer("AI Bot")]
-
 # Streamlit app
 st.title("Qwixx Game Simulator")
 
-if "current_player_index" not in st.session_state:
-    st.session_state.current_player_index = 0  # Initialize current player index
+if "game_engine" not in st.session_state:
+    st.session_state.game_engine = GameEngine()
 
-current_player_index = st.session_state.current_player_index
-current_player = players[current_player_index]
-game_state["current_player"] = current_player
+game_engine = st.session_state.game_engine
 
-if current_player.roll_dice():
-    st.write(f"{current_player.name} turn")
-    qwixx_dice = Dice() 
-    st.write(f"Dice result: {qwixx_dice.format_results()}")
-    st.write(f"Current Score card for {current_player.name}:")
-    current_player.make_move(game_state, qwixx_dice)
-
-    # Switch to the next player
-    current_player_index = (current_player_index + 1) % len(players)
-    st.session_state.current_player_index = current_player_index
+if game_engine.players[game_engine.current_player_index].name == "AI Bot":
+    game_engine.make_move()
+elif game_engine.players[game_engine.current_player_index].name == "Alice":
+    if st.button("Roll All Dice"):
+        game_engine.make_move()
