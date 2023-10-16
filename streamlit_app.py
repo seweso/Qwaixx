@@ -7,7 +7,7 @@ class GameEngine:
         self.players = [HumanPlayer("Alice"), AiPlayer("AI Bot")]
         self.current_player_index = 0
         self.qwixx_dice = Dice()
-        self.score_cards = {player.name: ScoreCard() for player in self.players}
+        self.score_cards = {player.name: ScoreCard() for player in this.players}
 
     def switch_to_next_player(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
@@ -41,7 +41,7 @@ class ScoreCard:
             if not numbers:
                 result.append(f"{color}:")
             else:
-                bonus = "B" if len numbers >= 5 and 12 in numbers else ""
+                bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
                 result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
         return '\n'.join(result)
 
