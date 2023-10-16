@@ -37,10 +37,10 @@ class ScoreCard:
 
     def format_results(self):
         result = []
-        for color, numbers in self.score_card.items():
-            if numbers:
-                bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
-                result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
+        for color in ['R', 'Y', 'G', 'B']:
+            numbers = self.score_card.get(color, [])
+            bonus = "B" if len(numbers) >= 5 and 12 in numbers else ""
+            result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
         return '\n'.join(result)
 
 class Player:
