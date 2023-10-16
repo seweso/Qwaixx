@@ -32,7 +32,7 @@ class ScoreCard:
         }
 
     def get_score_card(self):
-        return self.score_card
+        return self score_card
 
     def format_results(self):
         result = []
@@ -68,7 +68,6 @@ class Dice:
         self.results = []
 
     def roll(self):
-        random.shuffle(self.colors)  # Shuffle the colors
         self.results = [f"{color}{random.randint(1, 6)}" for color in self.colors]
 
     def format_results(self):
