@@ -7,10 +7,6 @@ class Player:
         self.name = name
 
     def make_move(self, game_state, dice_results):
-        formatted_results = dice_results.format_results()
-        st.write(f"{self.name} turn")
-        st.write(f"Dice result: {formatted_results}")
-        st.write(f"Current Score card for {self.name}:")
         # Implement the logic for a player's move
         pass
 
@@ -68,6 +64,6 @@ if current_player.roll_dice():
     st.write(f"Current Score card for {current_player.name}:")
     current_player.make_move(game_state, qwixx_dice)
 
-# Switch to the next player
-current_player_index = (current_player_index + 1) % len(players)
-st.session_state.current_player_index = current_player_index
+    # Switch to the next player
+    current_player_index = (current_player_index + 1) % len(players)
+    st.session_state.current_player_index = current_player_index
