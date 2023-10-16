@@ -67,7 +67,7 @@ class AiPlayer(Player):
 
 class Dice:
     def __init__(self):
-        self.colors = ['R', 'B', 'Y', 'G', 'W', 'W2']
+        self.colors = ['R', 'Y', 'G', 'B', 'W', 'W']
         self.results = []
 
     def roll(self):
