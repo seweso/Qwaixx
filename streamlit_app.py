@@ -2,7 +2,7 @@ import streamlit as st
 import random
 
 class Player:
-    def __init(self, name):
+    def __init__(self, name):
         self.name = name
 
     def make_move(self, game_state, dice_results):
