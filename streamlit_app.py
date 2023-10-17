@@ -83,16 +83,23 @@ class AiPlayer(Player):
     def make_move(self, dice_results, score_card, selections):
         time.sleep(1)
 
+        # AI player's selections
+        ai_selections = self.get_selections(dice_results, score_card)
+
+        # Update the score card with AI's selections
+        for selection in ai_selections:
+            color, number = selection[0], int(selection[1])
+            score_card.add_selection(color, number)
+
     def get_selections(self, dice_results, score_card):
         selections = []
 
-        for result in dice_results.results:  # Access the results attribute of the Dice object
+        for result in dice_results.results:
             color, number = result[0], int(result[1])
             if f"{color}{number}" in score_card.get_score_card():
                 selections.append(f"{color}{number}")
 
         if not selections:
-            # If no matching numbers are found, select the lowest available number in any row
             for color in ['R', 'Y', 'G', 'B']:
                 if color in score_card.get_score_card():
                     for i in range(2, 13):
@@ -101,6 +108,7 @@ class AiPlayer(Player):
                             break
 
         return selections
+
 
 class Dice:
     def __init__(self):
