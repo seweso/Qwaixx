@@ -82,6 +82,14 @@ class AiPlayer(Player):
     def make_move(self, dice_results, score_card, selections):
         time.sleep(1)
 
+        # AI player's selections
+        ai_selections = self.get_selections(dice_results, score_card)
+
+        # Update the score card with AI's selections
+        for selection in ai_selections:
+            color, number = selection[0], int(selection[1])
+            score_card.add_selection(color, number)
+
     def get_selections(self, dice_results, score_card):
         selections = []
 
@@ -99,6 +107,7 @@ class AiPlayer(Player):
                             break
 
         return selections
+
 
 class Dice:
     def __init__(self):
