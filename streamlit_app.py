@@ -7,7 +7,7 @@ class GameEngine:
         self.players = [HumanPlayer("Alice"), AiPlayer("AI Bot")]
         self.current_player_index = 0
         self.qwixx_dice = Dice()
-        self.score_card = ScoreCard()  # Create a single score card for the game
+        self.score_cards = {player.name: ScoreCard() for player in self.players}
 
     def switch_to_next_player(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
@@ -17,9 +17,9 @@ class GameEngine:
         self.qwixx_dice.roll()
         st.write(f"{current_player.name} turn")
         st.write(f"Dice result: {self.qwixx_dice.format_results()}")
-        selections = current_player.get_selections(self.qwixx_dice, self.score_card)
-        self.display_score_card(self.score_card)
-        current_player.make_move(self.qwixx_dice, self.score_card, selections)
+        selections = current_player.get_selections(self.qwixx_dice, self.score_cards[current_player.name])
+        self.display_score_card(self.score_cards[current_player.name])
+        current_player.make_move(self.qwixx_dice, self.score_cards[current_player.name], selections)
         self.switch_to_next_player()
 
     def display_score_card(self, score_card):
@@ -82,14 +82,6 @@ class AiPlayer(Player):
     def make_move(self, dice_results, score_card, selections):
         time.sleep(1)
 
-        # AI player's selections
-        ai_selections = self.get_selections(dice_results, score_card)
-
-        # Update the score card with AI's selections
-        for selection in ai_selections:
-            color, number = selection[0], int(selection[1])
-            score_card.add_selection(color, number)
-
     def get_selections(self, dice_results, score_card):
         selections = []
 
@@ -107,7 +99,6 @@ class AiPlayer(Player):
                             break
 
         return selections
-
 
 class Dice:
     def __init__(self):
