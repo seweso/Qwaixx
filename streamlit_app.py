@@ -17,7 +17,7 @@ class GameEngine:
         self.qwixx_dice.roll()  # Roll dice before displaying the turn
         st.write(f"{current_player.name} turn")
         st.write(f"Dice result: {self.qwixx_dice.format_results()}")
-        selections = current_player.get_selections()
+        selections = current_player.get_selections(self.qwixx_dice, self.score_cards[current_player.name])
         self.display_score_card(current_player.name, selections)
         current_player.make_move(self.qwixx_dice, self.score_cards[current_player.name], selections)
         self.switch_to_next_player()
@@ -67,14 +67,14 @@ class Player:
     def make_move(self, dice_results, score_card, selections):
         pass
 
-    def get_selections(self):
+    def get_selections(self, dice_results, score_card):
         pass
 
 class HumanPlayer(Player):
     def make_move(self, dice_results, score_card, selections):
         pass
 
-    def get_selections(self):
+    def get_selections(self, dice_results, score_card):
         st.write(f"Make your selections (e.g., R4,B12):")
         user_selections = st.text_input("Selections:")
         return user_selections
@@ -83,8 +83,24 @@ class AiPlayer(Player):
     def make_move(self, dice_results, score_card, selections):
         time.sleep(1)
 
-    def get_selections(self):
-        return []
+    def get_selections(self, dice_results, score_card):
+        selections = []
+
+        for result in dice_results:
+            color, number = result[0], int(result[1])
+            if f"{color}{number}" in score_card.get_score_card():
+                selections.append(f"{color}{number}")
+
+        if not selections:
+            # If no matching numbers are found, select the lowest available number in any row
+            for color in ['R', 'Y', 'G', 'B']:
+                if color in score_card.get_score_card():
+                    for i in range(2, 13):
+                        if f"{color}{i}" not in selections:
+                            selections.append(f"{color}{i}")
+                            break
+
+        return selections
 
 class Dice:
     def __init__(self):
