@@ -86,7 +86,7 @@ class AiPlayer(Player):
     def get_selections(self, dice_results, score_card):
         selections = []
 
-        for result in dice_results:
+        for result in dice_results.results:  # Access the results attribute of the Dice object
             color, number = result[0], int(result[1])
             if f"{color}{number}" in score_card.get_score_card():
                 selections.append(f"{color}{number}")
