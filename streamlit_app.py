@@ -7,25 +7,25 @@ class GameEngine:
         self.players = [HumanPlayer("Alice"), AiPlayer("AI Bot")]
         self.current_player_index = 0
         self.qwixx_dice = Dice()
-        self.score_cards = {player.name: ScoreCard() for player in self.players}
+        self.score_card = ScoreCard()  # Create a single score card for the game
 
     def switch_to_next_player(self):
         self.current_player_index = (self.current_player_index + 1) % len(self.players)
 
     def make_move(self):
         current_player = self.players[self.current_player_index]
-        self.qwixx_dice.roll()  # Roll dice before displaying the turn
+        self.qwixx_dice.roll()
         st.write(f"{current_player.name} turn")
         st.write(f"Dice result: {self.qwixx_dice.format_results()}")
-        selections = current_player.get_selections(self.qwixx_dice, self.score_cards[current_player.name])
-        self.display_score_card(current_player.name, selections)
-        current_player.make_move(self.qwixx_dice, self.score_cards[current_player.name], selections)
+        selections = current_player.get_selections(self.qwixx_dice, self.score_card)
+        self.display_score_card(self.score_card)
+        current_player.make_move(self.qwixx_dice, self.score_card, selections)
         self.switch_to_next_player()
 
-    def display_score_card(self, player_name, selections):
-        score_card = self.score_cards[player_name]
-        st.write(f"Current Score card for {player_name}:\n{score_card.format_results()}")
-        total_score = score_card.calculate_score(selections)
+    def display_score_card(self, score_card):
+        st.write("Current Score card:")
+        st.text(score_card.format_results())
+        total_score = score_card.calculate_total_score()
         st.write(f"Total Score: {total_score}")
 
 class ScoreCard:
@@ -48,12 +48,11 @@ class ScoreCard:
                 result.append(f"{color}:{','.join(map(str, numbers))}{bonus}")
         return '\n'.join(result)
 
-    def calculate_score(self, selections):
+    def calculate_total_score(self):
         total_score = 0
         for color, numbers in self.score_card.items():
             for number in numbers:
-                if f"{color}{number}" in selections:
-                    total_score += number
+                total_score += number
         return total_score
 
     def add_selection(self, color, number):
@@ -83,14 +82,6 @@ class AiPlayer(Player):
     def make_move(self, dice_results, score_card, selections):
         time.sleep(1)
 
-        # AI player's selections
-        ai_selections = self.get_selections(dice_results, score_card)
-
-        # Update the score card with AI's selections
-        for selection in ai_selections:
-            color, number = selection[0], int(selection[1])
-            score_card.add_selection(color, number)
-
     def get_selections(self, dice_results, score_card):
         selections = []
 
@@ -108,7 +99,6 @@ class AiPlayer(Player):
                             break
 
         return selections
-
 
 class Dice:
     def __init__(self):
@@ -128,9 +118,6 @@ if "game_engine" not in st.session_state:
     st.session_state.game_engine = GameEngine()
 
 game_engine = st.session_state.game_engine
-
-if "selections" not in st.session_state:
-    st.session_state.selections = []
 
 if st.button("Next Turn"):
     game_engine.make_move()
